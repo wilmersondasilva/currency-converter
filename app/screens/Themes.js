@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { ScrollView, StatusBar } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -12,8 +13,12 @@ const styles = EStyleSheet.create({
 });
 
 class CurrencyList extends Component {
-  handleThemePress = (color) => {
-    console.log('row press', color);
+  static propTypes = {
+    navigation: PropTypes.object,
+  };
+
+  handlePressTheme = () => {
+    this.props.navigation.goBack();
   };
 
   render() {
@@ -22,7 +27,7 @@ class CurrencyList extends Component {
         <StatusBar barStyle="default" translucent={false} />
         <ListItem
           text="Blue"
-          onPress={() => this.handleThemePress(styles.$blue)}
+          onPress={() => this.handlePressTheme(styles.$blue)}
           selected
           checkmark={false}
           iconBackground={styles.$blue}
@@ -30,7 +35,7 @@ class CurrencyList extends Component {
         <Separator />
         <ListItem
           text="Orange"
-          onPress={() => this.handleThemePress(styles.$orange)}
+          onPress={() => this.handlePressTheme(styles.$orange)}
           selected
           checkmark={false}
           iconBackground={styles.$orange}
@@ -38,7 +43,7 @@ class CurrencyList extends Component {
         <Separator />
         <ListItem
           text="Green"
-          onPress={() => this.handleThemePress(styles.$green)}
+          onPress={() => this.handlePressTheme(styles.$green)}
           selected
           checkmark={false}
           iconBackground={styles.$green}
@@ -46,7 +51,7 @@ class CurrencyList extends Component {
         <Separator />
         <ListItem
           text="Purple"
-          onPress={() => this.handleThemePress(styles.$purple)}
+          onPress={() => this.handlePressTheme(styles.$purple)}
           selected
           checkmark={false}
           iconBackground={styles.$purple}
