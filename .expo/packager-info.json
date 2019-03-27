@@ -1,9 +1,0 @@
-{
-  "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://tr-74d.anonymous.currency-converter.exp.direct",
-  "packagerNgrokUrl": "https://packager.tr-74d.anonymous.currency-converter.exp.direct",
-  "ngrokPid": 27362,
-  "devToolsPort": 19002,
-  "packagerPort": 19001,
-  "packagerPid": 27348
-}
