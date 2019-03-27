@@ -9,8 +9,9 @@ import { InputWithButton } from '../components/TextInput';
 import { ClearButton } from '../components/Button';
 import { LastConverted } from '../components/Text';
 import { Header } from '../components/Header';
+import { connectAlert } from '../components/Alert';
 
-import { swapCurrency, changeCurrencyAmount } from '../actions/currencies';
+import { swapCurrency, changeCurrencyAmount, getInitialConversion } from '../actions/currencies';
 
 class Home extends Component {
   static propTypes = {
@@ -23,6 +24,19 @@ class Home extends Component {
     isFetching: PropTypes.bool,
     lastConvertedDate: PropTypes.object,
     primaryColor: PropTypes.string,
+    currencyError: PropTypes.string,
+    alertWithType: PropTypes.func,
+  };
+
+  componentWillMount = () => {
+    this.props.dispatch(getInitialConversion());
+  };
+
+  componentWillReceiveProps = (nextProps) => {
+    const { currencyError, alertWithType } = this.props;
+    if (nextProps.currencyError && !currencyError) {
+      alertWithType('error', 'Error', nextProps.currencyError);
+    }
   };
 
   handlePressBaseCurrency = () => {
@@ -87,28 +101,20 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => {
-  // TODO: Refactor this method to be easier to read
-  const { baseCurrency } = state.currencies;
-  const { quoteCurrency } = state.currencies;
-  const { amount } = state.currencies;
+  const { baseCurrency, quoteCurrency } = state.currencies;
   const conversionSelector = state.currencies.conversions[baseCurrency] || {};
   const rates = conversionSelector.rates || {};
-  const conversionRate = rates[quoteCurrency] || 0;
-  const { isFetching } = conversionSelector;
-  const { primaryColor } = state.theme;
-  const lastConvertedDate = conversionSelector.date
-    ? new Date(conversionSelector.date)
-    : new Date();
 
   return {
     baseCurrency,
     quoteCurrency,
-    amount,
-    conversionRate,
-    isFetching,
-    lastConvertedDate,
-    primaryColor,
+    amount: state.currencies.amount,
+    conversionRate: rates[quoteCurrency] || 0,
+    lastConvertedDate: conversionSelector.date ? new Date(conversionSelector.date) : new Date(),
+    isFetching: conversionSelector.isFetching,
+    primaryColor: state.theme.primaryColor,
+    currencyError: state.currencies.error,
   };
 };
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(connectAlert(Home));
